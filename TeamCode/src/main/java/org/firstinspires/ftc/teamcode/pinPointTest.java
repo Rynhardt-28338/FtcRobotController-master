@@ -10,8 +10,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 @Autonomous
 public class pinPointTest extends LinearOpMode {
 
-    double targetX = 30;
-    double targetY = -30;
+    double targetX = 0;
+    double targetY = 30;
     double targetDir = 0;
 
     double powerX;
@@ -29,7 +29,8 @@ public class pinPointTest extends LinearOpMode {
 
         DriveSubsestem driveSubsestem = new DriveSubsestem(hardwareMap,telemetry);
 
-        PIDController pidController = new PIDController(0.005,0,0);
+        PIDController pidController = new PIDController(0.018,0.0008,0.0006);
+        //PIDController turnpidcontler = new PIDController(0.01,0,0);
 
 
 
@@ -41,9 +42,9 @@ public class pinPointTest extends LinearOpMode {
 
             odometrySubsystem.periodic(telemetry,robotState);
 
-            powerX = pidController.calculate(targetX-robotState.getCurentX());
-            powerY = pidController.calculate(targetY-robotState.getCurentY());
-            powerTurn = pidController.calculate(targetDir-robotState.getCurentDir());
+            powerX = pidController.calculate(targetX,robotState.getCurentX());
+            powerY = pidController.calculate(targetY,robotState.getCurentY());
+            powerTurn = pidController.calculate(targetDir,robotState.getCurentDir());
 
 
             driveSubsestem.drive(powerX,powerY,powerTurn);
