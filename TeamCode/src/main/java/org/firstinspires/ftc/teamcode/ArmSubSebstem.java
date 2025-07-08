@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -27,6 +28,7 @@ public class ArmSubSebstem {
         armMotor.setTargetPosition(0);
         armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -42,34 +44,69 @@ public class ArmSubSebstem {
 
     public void moveArm(double adjustment, String acshon){
 
-        elbow.setPosition(0.6);
 
-        if (acshon == "scor"){
+        if (acshon == "sample"){
 
-            armMotor.setTargetPosition(3000);
-            slideMotor.setTargetPosition(100);
+            armMotor.setTargetPosition(1700);
 
-            elbow.setPosition(0.6);
+            if (armMotor.getCurrentPosition() >= 600) {
 
-            telemetry.addLine("up");
+                slideMotor.setTargetPosition(1200);
 
-        }
+            }
 
-        if (acshon == "home"){
+            if (armMotor.getCurrentPosition() >= 1500 && slideMotor.getCurrentPosition() >= 1090) {
 
-            elbow.setPosition(0.9);
+                elbow.setPosition(0.25);
 
-            armMotor.setTargetPosition(10);
-            slideMotor.setTargetPosition(1);
+            }
+
+        } else if (acshon == "home"){
+
+            if (acshon == "sample") {
+                elbow.setPosition(0.99);
+                slideMotor.setTargetPosition(1);
+
+                if (slideMotor.getCurrentPosition() <= 800) {
+
+                    armMotor.setTargetPosition(10);
+
+                }
+            } else {
+
+                elbow.setPosition(0.99);
+                slideMotor.setTargetPosition(1);
+
+                if (slideMotor.getCurrentPosition() <= 300){
+
+                    armMotor.setTargetPosition(10);
+
+                }
+
+            }
+
+        } else if (acshon == "spesement") {
+
+
+
+        } else if (acshon == "pickup") {
+
+            elbow.setPosition(0.25);
+            slideMotor.setTargetPosition(600);
+            armMotor.setTargetPosition(250);
 
         }
 
         armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+        armMotor.setPower(Math.abs(1));
+        slideMotor.setPower(Math.abs(1));
+
 
         telemetry.addData("target", acshon);
         telemetry.addData("agustment",adjustment);
+        telemetry.addData("arm target", armMotor.getTargetPosition());
 
     }
 }

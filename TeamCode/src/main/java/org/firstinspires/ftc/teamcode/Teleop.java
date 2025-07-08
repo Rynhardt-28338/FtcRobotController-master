@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @TeleOp
 public class Teleop extends LinearOpMode {
@@ -19,8 +18,11 @@ public class Teleop extends LinearOpMode {
 
         String acshon = "";
 
+        String gripperPos = "";
+
         DriveSubsestem driveSubsestem = new DriveSubsestem(hardwareMap,telemetry);
         ArmSubSebstem armSubSebstem = new ArmSubSebstem(hardwareMap, telemetry);
+        GripperSubsestem gripperSubsestem = new GripperSubsestem(hardwareMap,telemetry);
 
         waitForStart();
 
@@ -34,19 +36,34 @@ public class Teleop extends LinearOpMode {
 
             driveSubsestem.drive(forwhard,strafe,turn);
 
-            if (gamepad1.dpad_down) {
+            if (gamepad1.b) {
 
                 acshon = "home";
 
-            } else if (gamepad1.dpad_up) {
+            } else if (gamepad1.y) {
 
-                acshon = "scor";
+                acshon = "sample";
+
+            } else if (gamepad1.x) {
+
+                acshon = "spesement";
+
+            } else if (gamepad1.a) {
+
+                acshon = "pickup";
+
+            } else  if (gamepad1.right_bumper) {
+
+                gripperPos = "open";
+
+            } else {
+
+                gripperPos = "closed";
 
             }
 
-
             armSubSebstem.moveArm(0,acshon);
-
+            gripperSubsestem.moveGripper(gripperPos,0.5);
 
             telemetry.update();
 
