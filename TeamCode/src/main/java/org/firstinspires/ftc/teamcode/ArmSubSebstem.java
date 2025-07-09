@@ -70,7 +70,7 @@ public class ArmSubSebstem {
 
                 if (slideMotor.getCurrentPosition() <= 800) {
 
-                    armMotor.setTargetPosition(10);
+                    armMotor.setTargetPosition(50);
 
                 }
             } else {
@@ -94,7 +94,7 @@ public class ArmSubSebstem {
 
             elbow.setPosition(0.25);
             slideMotor.setTargetPosition(600);
-            armPos = 250;
+            armPos = 300;
 
         }
         armMotor.setTargetPosition(armPos + Adjustment);

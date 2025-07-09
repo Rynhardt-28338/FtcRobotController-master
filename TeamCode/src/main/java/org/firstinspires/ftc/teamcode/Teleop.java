@@ -3,12 +3,13 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-
 @TeleOp
 public class Teleop extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+
+        boolean wasCiralPresed;
 
         double forwhard;
 
@@ -22,7 +23,7 @@ public class Teleop extends LinearOpMode {
 
         double armAjustment = 0;
 
-        double SlowPos = 1;
+        double SlowPos = 1.0;
 
         RobotState robotState = new RobotState();
 
@@ -50,7 +51,6 @@ public class Teleop extends LinearOpMode {
 
             turn = (SlowPos * gamepad1.left_stick_x);
 
-
             if (gamepad1.b) {
 
                 armAjustment = 0;
@@ -71,7 +71,7 @@ public class Teleop extends LinearOpMode {
                 armAjustment = 0;
                 acshon = "pickup";
 
-            } else  if (gamepad1.back) {
+            } else  if (gamepad1.circle) {
 
                 gripperPos = "open";
 
@@ -96,3 +96,4 @@ public class Teleop extends LinearOpMode {
         }
     }
 }
+
