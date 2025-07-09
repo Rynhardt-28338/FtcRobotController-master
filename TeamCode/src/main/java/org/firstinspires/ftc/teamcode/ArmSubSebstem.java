@@ -9,17 +9,17 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class ArmSubSebstem {
 
+
     private final Telemetry telemetry;
     DcMotor armMotor;
-
     DcMotor slideMotor;
     Servo elbow;
+    int armPos = 0;
 
     public ArmSubSebstem(HardwareMap hardwareMap, Telemetry telemetry){
 
         armMotor = hardwareMap.dcMotor.get("arm_motor");
         slideMotor = hardwareMap.dcMotor.get("slide_motor");
-
 
         this.telemetry = telemetry;
 
@@ -27,13 +27,13 @@ public class ArmSubSebstem {
         armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         armMotor.setTargetPosition(0);
         armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+   //     armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         slideMotor.setTargetPosition(0);
-        slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+     //   slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         elbow = hardwareMap.servo.get("elbow");
@@ -42,12 +42,13 @@ public class ArmSubSebstem {
 
     }
 
-    public void moveArm(double adjustment, String acshon){
+    public void moveArm(int Adjustment, String acshon, RobotState robotState){
+
 
 
         if (acshon == "sample"){
 
-            armMotor.setTargetPosition(1700);
+            armPos = 1700;
 
             if (armMotor.getCurrentPosition() >= 600) {
 
@@ -79,7 +80,7 @@ public class ArmSubSebstem {
 
                 if (slideMotor.getCurrentPosition() <= 300){
 
-                    armMotor.setTargetPosition(10);
+                    armPos = 10;
 
                 }
 
@@ -93,10 +94,10 @@ public class ArmSubSebstem {
 
             elbow.setPosition(0.25);
             slideMotor.setTargetPosition(600);
-            armMotor.setTargetPosition(250);
+            armPos = 250;
 
         }
-
+        armMotor.setTargetPosition(armPos + Adjustment);
         armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
@@ -105,8 +106,11 @@ public class ArmSubSebstem {
 
 
         telemetry.addData("target", acshon);
-        telemetry.addData("agustment",adjustment);
+        telemetry.addData("agustment", Adjustment);
         telemetry.addData("arm target", armMotor.getTargetPosition());
+
+        robotState.setArmPos(armMotor.getCurrentPosition());
+        robotState.setSlidePos(slideMotor.getCurrentPosition());
 
     }
 }

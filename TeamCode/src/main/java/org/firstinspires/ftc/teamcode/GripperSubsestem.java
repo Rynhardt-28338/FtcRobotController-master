@@ -7,6 +7,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class GripperSubsestem {
 
+
     private final Telemetry telemetry;
     private final Servo gripper;
     private final Servo wrist;
@@ -22,7 +23,7 @@ public class GripperSubsestem {
 
     }
 
-    public void moveGripper(String gripper_pos,double wrist_pos) {
+    public void moveGripper(String gripper_pos,double wrist_pos, RobotState robotState) {
 
         if (gripper_pos == "open") {
 
@@ -35,6 +36,9 @@ public class GripperSubsestem {
         }
 
         wrist.setPosition(wrist_pos);
+
+        robotState.setGripperPos(gripper_pos);
+        robotState.setWristPos(wrist_pos);
 
     }
 
