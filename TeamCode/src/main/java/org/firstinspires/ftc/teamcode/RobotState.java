@@ -10,6 +10,7 @@ public class RobotState {
     int slidePos;
     double wristPos;
     String gripperPos;
+    int armTarget;
 
     public void setCurentX(double curentX){this.curentX = curentX;}
     public void setCurentY(double curentY){this.curentY = curentY;}
@@ -30,5 +31,9 @@ public class RobotState {
 
     public double getWristPos(){return wristPos;}
     public String getGripperPos(){return gripperPos;}
+
+    public int getArmTarget(){return armTarget;}
+
+    public void setArmTarget(int armTarget){this.armTarget = armTarget;}
 
 }

@@ -15,6 +15,7 @@ public class ArmSubSebstem {
     DcMotor slideMotor;
     Servo elbow;
     int armPos = 0;
+    int slidePos = 0;
 
     public ArmSubSebstem(HardwareMap hardwareMap, Telemetry telemetry){
 
@@ -42,17 +43,16 @@ public class ArmSubSebstem {
 
     }
 
-    public void moveArm(int Adjustment, String acshon, RobotState robotState){
+    public void moveArm(int ArmAdjustment,int SlideAjustment, String acshon, RobotState robotState) {
 
 
+        if (acshon == "sample") {
 
-        if (acshon == "sample"){
-
-            armPos = 1700;
+            armPos = 1600;
 
             if (armMotor.getCurrentPosition() >= 600) {
 
-                slideMotor.setTargetPosition(1200);
+                slidePos = 1450;
 
             }
 
@@ -62,11 +62,11 @@ public class ArmSubSebstem {
 
             }
 
-        } else if (acshon == "home"){
+        } else if (acshon == "home") {
 
             if (acshon == "sample") {
                 elbow.setPosition(0.99);
-                slideMotor.setTargetPosition(1);
+                slidePos = 1;
 
                 if (slideMotor.getCurrentPosition() <= 800) {
 
@@ -76,9 +76,9 @@ public class ArmSubSebstem {
             } else {
 
                 elbow.setPosition(0.99);
-                slideMotor.setTargetPosition(1);
+                slidePos = 1;
 
-                if (slideMotor.getCurrentPosition() <= 300){
+                if (slideMotor.getCurrentPosition() <= 300) {
 
                     armPos = 10;
 
@@ -86,18 +86,28 @@ public class ArmSubSebstem {
 
             }
 
-        } else if (acshon == "spesement") {
+        } else if (acshon == "spesementRedy") {
 
+            armPos = 1497;
+            slidePos = 200;
+            elbow.setPosition(0.25);
 
+        } else if (acshon == "spesementFinish") {
+
+            slidePos = 10;
+            elbow.setPosition(0.99);
 
         } else if (acshon == "pickup") {
 
             elbow.setPosition(0.25);
-            slideMotor.setTargetPosition(600);
-            armPos = 300;
+            slidePos = 400;
+            armPos = 200;
 
         }
-        armMotor.setTargetPosition(armPos + Adjustment);
+
+
+        armMotor.setTargetPosition(armPos + ArmAdjustment);
+        slideMotor.setTargetPosition(slidePos + SlideAjustment);
         armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
@@ -106,11 +116,12 @@ public class ArmSubSebstem {
 
 
         telemetry.addData("target", acshon);
-        telemetry.addData("agustment", Adjustment);
+        telemetry.addData("agustment", ArmAdjustment);
         telemetry.addData("arm target", armMotor.getTargetPosition());
 
         robotState.setArmPos(armMotor.getCurrentPosition());
         robotState.setSlidePos(slideMotor.getCurrentPosition());
+        robotState.setArmTarget(armMotor.getTargetPosition());
 
     }
 }
