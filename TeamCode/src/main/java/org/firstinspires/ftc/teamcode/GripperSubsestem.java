@@ -27,11 +27,11 @@ public class GripperSubsestem {
 
         if (gripper_pos == "open") {
 
-            gripper.setPosition(0.25);
+            gripper.setPosition(0.85);
 
         } else if (gripper_pos == "closed") {
 
-            gripper.setPosition(0.85);
+            gripper.setPosition(0.25);
 
         }
 

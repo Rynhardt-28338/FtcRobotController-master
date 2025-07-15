@@ -95,7 +95,9 @@ public class ArmSubSebstem {
         } else if (acshon == "spesementFinish") {
 
             slidePos = 10;
-            elbow.setPosition(0.99);
+            if (robotState.getSlidePos() <= 20) {
+                elbow.setPosition(0.99);
+            }
 
         } else if (acshon == "pickup") {
 
@@ -122,6 +124,7 @@ public class ArmSubSebstem {
         robotState.setArmPos(armMotor.getCurrentPosition());
         robotState.setSlidePos(slideMotor.getCurrentPosition());
         robotState.setArmTarget(armMotor.getTargetPosition());
+        robotState.setSlideTarget(slideMotor.getCurrentPosition());
 
     }
 }

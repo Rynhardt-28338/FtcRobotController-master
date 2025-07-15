@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp
 public class Teleop extends LinearOpMode {
@@ -35,6 +36,7 @@ public class Teleop extends LinearOpMode {
         ArmSubSebstem armSubSebstem = new ArmSubSebstem(hardwareMap, telemetry);
         GripperSubsestem gripperSubsestem = new GripperSubsestem(hardwareMap,telemetry);
 
+        ElapsedTime elapsedTime = new ElapsedTime();
 
 
         waitForStart();
@@ -71,22 +73,7 @@ public class Teleop extends LinearOpMode {
                 armAjustment = 0;
                 acshon = "sample";
 
-            } else if (gamepad1.x) {
-
-                if ((robotState.getArmPos() >= (robotState.getArmTarget() - 10)) && (acshon == "spesementFinish" || acshon == "spesementRedy")) {
-
-                    acshon = "spesementFinish";
-
-                } else {
-
-                    slideAjustment = 0;
-                    wristPos = 0.5;
-                    armAjustment = 0;
-                    acshon = "spesementRedy";
-
-                }
-
-            } else if (gamepad1.a) {
+            } else if (gamepad1.a && (!(acshon == "sample"))) {
 
                 slideAjustment = 0;
                 wristPos = 0.5;
@@ -153,10 +140,33 @@ public class Teleop extends LinearOpMode {
 
             }
 
+            if (gamepad1.x) {
+
+                if ((robotState.getArmPos() >= (robotState.getArmTarget() - 1400)) && (acshon == "spesementFinish" || acshon == "spesementRedy")) {
+
+                    elapsedTime.reset();
+                    acshon = "spesementFinish";
+
+                } else {
+
+                    slideAjustment = 0;
+                    wristPos = 0.5;
+                    armAjustment = 0;
+                    acshon = "spesementRedy";
+
+                }
+                if ((robotState.getSlideTarget() >= (robotState.getSlideTarget() - 10)) && (acshon == "spesementFinish") && (elapsedTime.milliseconds() >= 200)) {
+
+                    gripperPos = "open";
+
+                }
+            }
+
             driveSubsestem.drive(forwhard,strafe,turn);
             armSubSebstem.moveArm(((int) armAjustment),slideAjustment,acshon,robotState);
             gripperSubsestem.moveGripper(gripperPos,wristPos,robotState);
 
+            telemetry.addData("gripper pos: ", gripperPos);
             telemetry.addData("triger: ",gamepad1.left_trigger);
             telemetry.addData("speed limet: ", SlowPos);
             telemetry.update();
