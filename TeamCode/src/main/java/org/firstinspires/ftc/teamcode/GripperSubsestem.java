@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -11,6 +12,7 @@ public class GripperSubsestem {
     private final Telemetry telemetry;
     private final Servo gripper;
     private final Servo wrist;
+    private final DigitalChannel sensor;
 
     public GripperSubsestem(HardwareMap hardwareMap, Telemetry telemetry){
 
@@ -18,6 +20,7 @@ public class GripperSubsestem {
 
         gripper = hardwareMap.servo.get("gripper");
         wrist = hardwareMap.servo.get("wrist");
+        sensor = hardwareMap.get(DigitalChannel.class, "gripper_sensor");
 
         telemetry.addLine("gripper ready");
 
@@ -39,7 +42,7 @@ public class GripperSubsestem {
 
         robotState.setGripperPos(gripper_pos);
         robotState.setWristPos(wrist_pos);
-
+        robotState.setGripperDetectedObject(sensor.getState());
     }
 
 }

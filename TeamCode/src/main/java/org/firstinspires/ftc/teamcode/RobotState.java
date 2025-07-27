@@ -12,6 +12,7 @@ public class RobotState {
     String gripperPos;
     int armTarget;
     int slideTarget;
+    boolean gripperDetectedObject;
 
     public void setCurentX(double curentX){this.curentX = curentX;}
     public void setCurentY(double curentY){this.curentY = curentY;}
@@ -38,5 +39,8 @@ public class RobotState {
 
     public void setArmTarget(int armTarget){this.armTarget = armTarget;}
     public void setSlideTarget(int slideTarget){this.slideTarget = slideTarget;}
+
+    public void setGripperDetectedObject(boolean detected){this.gripperDetectedObject = detected;}
+    public boolean getGripperDetectedObject(){return this.gripperDetectedObject;}
 
 }
