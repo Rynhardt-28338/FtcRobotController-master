@@ -21,6 +21,7 @@ public class GripperSubsestem {
         gripper = hardwareMap.servo.get("gripper");
         wrist = hardwareMap.servo.get("wrist");
         sensor = hardwareMap.get(DigitalChannel.class, "gripper_sensor");
+        sensor.setMode(DigitalChannel.Mode.INPUT);
 
         telemetry.addLine("gripper ready");
 
@@ -42,7 +43,7 @@ public class GripperSubsestem {
 
         robotState.setGripperPos(gripper_pos);
         robotState.setWristPos(wrist_pos);
-        robotState.setGripperDetectedObject(sensor.getState());
+        robotState.setGripperDetectedObject(!sensor.getState() && gripper_pos == "closed");
     }
 
 }
