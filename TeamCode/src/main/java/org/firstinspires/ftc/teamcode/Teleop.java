@@ -10,7 +10,9 @@ public class Teleop extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        boolean wasCiralPresed = false;
+        double armSpeed = 7.5;
+
+        double wristSpeed = 0.015;
 
         double forwhard;
 
@@ -43,6 +45,7 @@ public class Teleop extends LinearOpMode {
 
         while (opModeIsActive()) {
 
+            // Check if the slide is far out. If so, we slow down the drive speed to prevent tipping over
             if (robotState.getSlidePos() >= 50) {
 
                 SlowPos = 0.3;
@@ -53,89 +56,63 @@ public class Teleop extends LinearOpMode {
 
             }
 
+            // Set the robot drive values
             strafe = (SlowPos * gamepad1.right_stick_x);
-
             forwhard = (SlowPos * gamepad1.right_stick_y);
-
             turn = (SlowPos * gamepad1.left_stick_x);
 
             if (gamepad1.b) {
-
                 slideAjustment = 0;
                 wristPos = 0.5;
                 armAjustment = 0;
                 acshon = "home";
 
             } else if (gamepad1.y) {
-
                 slideAjustment = 0;
                 wristPos = 0.5;
                 armAjustment = 0;
                 acshon = "sample";
 
             } else if (gamepad1.a && (!(acshon == "sample"))) {
-
                 slideAjustment = 0;
                 wristPos = 0.5;
                 armAjustment = 0;
                 acshon = "pickup";
+            }
+
+            // Move the wrist (left / right)
+            if (gamepad1.start) {
+
+                wristPos = wristPos + wristSpeed;
+
+            } else if (gamepad1.back) {
+
+                wristPos = wristPos - wristSpeed;
+
+            }
+
+            // Move the arm up / down
+            if (gamepad1.right_bumper) {
+
+                // Move arm upwards
+                armAjustment = armAjustment + armSpeed;
 
             } else if (gamepad1.right_trigger >= 0.1) {
 
-                armAjustment = armAjustment - 1.5;
+                // Move arm downwards
+                armAjustment = armAjustment - armSpeed;
 
             }
 
-            if (!wasCiralPresed) {
-
-                wasCiralPresed = true;
-
-                if (gamepad1.dpad_up && gripperPos == "closed") {
-
-                    gripperPos = "open";
-
-                } else if (gamepad1.dpad_up && (gripperPos == "open")) {
-
-                    gripperPos = "closed";
-
-                }
-
-            } else {
-
-                if (!gamepad1.dpad_up) {
-
-                    wasCiralPresed = false;
-
-                }
-
-            }
-
-            if (gamepad1.start) {
-
-                wristPos = wristPos + 0.05;
-
-            }
-
-            if (gamepad1.back) {
-
-                wristPos = wristPos - 0.05;
-
-            }
-
-            if (gamepad1.right_bumper) {
-
-                armAjustment = armAjustment + 1.5;
-
-            }
-
+            // Move the slide in / out
             if (gamepad1.left_bumper) {
 
+                // Move slide out (extend)
                 slideAjustment++;slideAjustment++;slideAjustment++;slideAjustment++;slideAjustment++;slideAjustment++;
 
-            }
+            } else if (gamepad1.left_trigger >= 0.1) {
 
-            if (gamepad1.left_trigger >= 0.1) {
-
+                // Move slide in (retract)
                 slideAjustment--;slideAjustment--;slideAjustment--;slideAjustment--;slideAjustment--;slideAjustment--;
 
             }
@@ -164,11 +141,12 @@ public class Teleop extends LinearOpMode {
 
             driveSubsestem.drive(forwhard,strafe,turn);
             armSubSebstem.moveArm(((int) armAjustment),slideAjustment,acshon,robotState);
-            gripperSubsestem.moveGripper(gripperPos,wristPos,robotState);
+            gripperSubsestem.moveGripper(gamepad1,wristPos,robotState);
 
             telemetry.addData("gripper pos: ", gripperPos);
             telemetry.addData("triger: ",gamepad1.left_trigger);
             telemetry.addData("speed limet: ", SlowPos);
+            telemetry.addData("object detected: ", robotState.getGripperDetectedObject());
             telemetry.update();
 
         }

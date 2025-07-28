@@ -64,17 +64,6 @@ public class ArmSubSebstem {
 
         } else if (acshon == "home") {
 
-            if (acshon == "sample") {
-                elbow.setPosition(0.99);
-                slidePos = 1;
-
-                if (slideMotor.getCurrentPosition() <= 800) {
-
-                    armMotor.setTargetPosition(50);
-
-                }
-            } else {
-
                 elbow.setPosition(0.99);
                 slidePos = 1;
 
@@ -83,8 +72,6 @@ public class ArmSubSebstem {
                     armPos = 10;
 
                 }
-
-            }
 
         } else if (acshon == "spesementRedy") {
 
