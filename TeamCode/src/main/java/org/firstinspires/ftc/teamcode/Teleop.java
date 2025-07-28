@@ -14,8 +14,6 @@ public class Teleop extends LinearOpMode {
 
         double wristSpeed = 0.015;
 
-        boolean wasCiralPresed = false;
-
         double forwhard;
 
         double strafe;
@@ -82,30 +80,6 @@ public class Teleop extends LinearOpMode {
                 acshon = "pickup";
             }
 
-            if (!wasCiralPresed) {
-
-                wasCiralPresed = true;
-
-                if (gamepad1.dpad_up && gripperPos == "closed") {
-
-                    gripperPos = "open";
-
-                } else if (gamepad1.dpad_up && (gripperPos == "open")) {
-
-                    gripperPos = "closed";
-
-                }
-
-            } else {
-
-                if (!gamepad1.dpad_up) {
-
-                    wasCiralPresed = false;
-
-                }
-
-            }
-
             // Move the wrist (left / right)
             if (gamepad1.start) {
 
@@ -167,7 +141,7 @@ public class Teleop extends LinearOpMode {
 
             driveSubsestem.drive(forwhard,strafe,turn);
             armSubSebstem.moveArm(((int) armAjustment),slideAjustment,acshon,robotState);
-            gripperSubsestem.moveGripper(gripperPos,wristPos,robotState);
+            gripperSubsestem.moveGripper(gamepad1,wristPos,robotState);
 
             telemetry.addData("gripper pos: ", gripperPos);
             telemetry.addData("triger: ",gamepad1.left_trigger);
