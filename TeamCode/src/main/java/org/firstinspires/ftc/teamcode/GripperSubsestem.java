@@ -15,7 +15,7 @@ public class GripperSubsestem {
     boolean isBusyGrabbing;
     ElapsedTime runtime;
     DigitalChannel sensor;
-    double open = 0.85;
+    double open = 0.95;
     double close = 0.25;
     int stage = 1;
     private final Telemetry telemetry;
