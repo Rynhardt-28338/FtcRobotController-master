@@ -143,7 +143,7 @@ public class Teleop extends LinearOpMode {
             armSubSebstem.moveArm(((int) armAjustment),slideAjustment,acshon,robotState);
             gripperSubsestem.moveGripper(gamepad1,wristPos,robotState);
 
-            telemetry.addData("gripper pos: ", gripperPos);
+            telemetry.addData("gripper pos: ", robotState.getGripperPos());
             telemetry.addData("triger: ",gamepad1.left_trigger);
             telemetry.addData("speed limet: ", SlowPos);
             telemetry.addData("object detected: ", robotState.getGripperDetectedObject());
