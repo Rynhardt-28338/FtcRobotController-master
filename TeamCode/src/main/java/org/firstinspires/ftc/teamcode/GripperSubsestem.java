@@ -9,18 +9,20 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class GripperSubsestem {
+    double gripperWaitTimeSeconds = 0.3;
+    boolean isGripperBusy = false;
     double waitTime = 1.0;
     boolean isBusyGrabbing;
     ElapsedTime runtime;
     DigitalChannel sensor;
-    double open = 0.85;
+    double open = 1.0;
     double close = 0.25;
     int stage = 1;
     private final Telemetry telemetry;
     private final Servo gripper;
     private final Servo wrist;
 
-    public GripperSubsestem(HardwareMap hardwareMap, Telemetry telemetry){
+    public GripperSubsestem(HardwareMap hardwareMap, Telemetry telemetry) {
 
         this.telemetry = telemetry;
 
@@ -35,13 +37,31 @@ public class GripperSubsestem {
 
     public void moveGripper(Gamepad gamepad1, double wrist_pos, RobotState robotState) {
 
-        if(gamepad1.dpad_up) {
+        if (gamepad1.dpad_up && !isBusyGrabbing) {
+            if (runtime == null) {
+                runtime = new ElapsedTime();
+            }
+            runtime.reset();
+            isGripperBusy = true;
+        }
+
+        if (isGripperBusy) {
             if (robotState.getGripperPos() == "closed") {
+                // Open the gripper
                 gripper.setPosition(open);
-                robotState.setGripperPos("open");
+                if(runtime.seconds() >= gripperWaitTimeSeconds){
+                    isGripperBusy = false;
+                    robotState.setGripperPos("open") ;
+                    runtime = null;
+                }
             } else {
+                // Close the gripper
                 gripper.setPosition(close);
-                robotState.setGripperPos("closed");
+                if(runtime.seconds() >= gripperWaitTimeSeconds){
+                    isGripperBusy = false;
+                    robotState.setGripperPos("closed");
+                    runtime = null;
+                }
             }
         }
 
@@ -113,6 +133,7 @@ public class GripperSubsestem {
         runtime = null;
         isBusyGrabbing = false;
     }
+
     public void dropTheBlock(RobotState robotState) {
         gripper.setPosition(open);
         robotState.setGripperPos("open");
